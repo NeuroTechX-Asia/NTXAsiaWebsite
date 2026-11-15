@@ -13,8 +13,10 @@ function pickLocale(request) {
   return DEFAULT_LOCALE;
 }
 
-export function middleware(request) {
-  const { pathname, search } = request.nextUrl;
+// Next.js 16 renamed Middleware to Proxy; the proxy runs on the Node.js runtime,
+// which is what Vercel accepts now that the Edge runtime is deprecated.
+export default function proxy(request) {
+  const { pathname } = request.nextUrl;
   const hasLocale = LOCALES.some((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`));
   if (hasLocale) return NextResponse.next();
 
