@@ -9,6 +9,7 @@ import ConstellationMesh from "./ConstellationMesh";
 import ThemeToggle from "./ThemeToggle";
 import ContactDialog from "./ContactDialog";
 import AsiaChapterMap from "./AsiaChapterMap";
+import SocialLinks from "./SocialLinks";
 import { swapLocale } from "../content/locales";
 
 const YOUTUBE = "https://www.youtube.com/@NeuroTechXAsia";
@@ -646,6 +647,7 @@ export default function Site({ copy, ecosystem, locale = "zh" }) {
                 </a>
               </li>
             </ul>
+            <SocialLinks t={t} />
           </div>
         </div>
         <div className="site-footer-bar px-5 py-5">

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { encodeChunks } from "../../../lib/obfuscate";
+
 export const runtime = "nodejs";
 
 /**
@@ -60,26 +62,12 @@ export async function GET() {
 }
 
 /**
- * Obfuscated reveal, used when no mail provider is configured.
- *
- * The address is split in three, each chunk XOR-free but shifted by its own random
- * offset, so the response is a list of integers rather than an address. This stops
- * harvesters and casual inspection — it is obfuscation, not secrecy: anyone who runs
- * the page and decodes the numbers can recover it. The only real gate would be a
- * CAPTCHA or a mail provider that keeps the address off the wire entirely.
+ * Obfuscated reveal, used when no mail provider is configured: the address is
+ * cut into three chunks whose character codes are shifted by random per-chunk
+ * offsets, so the response is a list of integers rather than an address. The
+ * encoder is shared with the community invite links (`lib/obfuscate.js`) so
+ * there is one mechanism on the site, not two.
  */
-function encodeAddress(address) {
-  const codes = [...address].map((c) => c.charCodeAt(0));
-  const size = Math.ceil(codes.length / 3);
-  const parts = [0, 1, 2].map((i) => {
-    const offset = 1 + Math.floor(Math.random() * 200);
-    return {
-      o: offset,
-      c: codes.slice(i * size, (i + 1) * size).map((code) => code + offset),
-    };
-  });
-  return parts;
-}
 
 function revealLimited(ip) {
   const now = Date.now();
@@ -104,7 +92,7 @@ export async function POST(request) {
     if (!address) return NextResponse.json({ error: "not_configured" }, { status: 503 });
     if (revealLimited(ip)) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
     return NextResponse.json(
-      { p: encodeAddress(address) },
+      { p: encodeChunks(address) },
       { headers: { "cache-control": "no-store" } }
     );
   }

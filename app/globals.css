@@ -1486,3 +1486,57 @@ section[id],
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
+
+/* Community channel row — icon-only links in the footer's "global network"
+   column. One accent and hairlines, like the rest of the page: seven brand
+   palettes in a row would fight the single-accent design, so the glyphs are
+   drawn in currentColor and only the hover state takes the accent. */
+.social-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+}
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0;
+  border: 1px solid rgba(190, 235, 245, 0.22);
+  border-radius: 0.55rem;
+  background: rgba(8, 20, 26, 0.38);
+  color: rgba(216, 234, 240, 0.86);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease,
+    transform 0.2s ease, box-shadow 0.2s ease;
+}
+.social-btn svg {
+  display: block;
+}
+.social-btn:hover,
+.social-btn:focus-visible {
+  color: #67e8f9;
+  border-color: rgba(34, 211, 238, 0.55);
+  background: rgba(34, 211, 238, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -16px rgba(34, 211, 238, 0.85);
+  outline: none;
+}
+.social-btn[aria-busy="true"] {
+  opacity: 0.55;
+  cursor: progress;
+}
+.social-note {
+  margin-top: 0.6rem;
+  max-width: 16rem;
+  font-size: 0.68rem;
+  line-height: 1.5;
+  color: rgba(200, 228, 236, 0.55);
+}
+.social-note-error {
+  color: #fca5a5;
+}
