@@ -626,7 +626,6 @@ export default function Site({ copy, ecosystem, locale = "zh" }) {
               <span className="footer-region">ASIA - CHINA</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{t.footer.about}</p>
-            <p className="mt-4 text-xs text-muted-foreground">{t.footer.legal}</p>
           </div>
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{t.footer.links}</p>

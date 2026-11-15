@@ -90,9 +90,11 @@ export default function SocialLinks({ t }) {
           </li>
         ))}
       </ul>
-      <p className={failed ? "social-note social-note-error" : "social-note"}>
-        {failed === "" ? t.footer.socialNote : t.footer.socialError}
-      </p>
+      {failed !== "" && (
+        <p className="social-note social-note-error" role="alert">
+          {t.footer.socialError}
+        </p>
+      )}
     </>
   );
 }
