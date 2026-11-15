@@ -1,0 +1,681 @@
+[
+  {
+    "name": "City University of Hong Kong (Dongguan)",
+    "native": "香港城市大学（东莞）",
+    "type": "University",
+    "city": "Dongguan",
+    "fields": [
+      "NE",
+      "AIH",
+      "NAI"
+    ],
+    "website": "https://www.cityu-dg.edu.cn",
+    "verified": true,
+    "hook": "New HK-owned campus in Dongguan's manufacturing belt; offers an MSc in Biomedical Engineering and flags AI/data science and BME as strategic areas — a low-cost venue for hands-on BCI hardware workshops."
+  },
+  {
+    "name": "Dongguan Houjie Hospital — Brain-Computer Interface Research Institute",
+    "native": "东莞市厚街医院脑机接口研究院",
+    "type": "Hospital",
+    "city": "Dongguan",
+    "fields": [
+      "BCI",
+      "AIH"
+    ],
+    "website": "https://dghb.dg.gov.cn",
+    "verified": false,
+    "hook": "Hospital-based BCI institute opened Jul 2025 with SCUT's Wu Kai team and a Guangzhou startup (Jixin Zhiyuan), targeting Alzheimer's, stroke and Parkinson's — an early example of Dongguan buying into BCI clinically."
+  },
+  {
+    "name": "Dongguan University of Technology — School of Life Health Technology",
+    "native": "东莞理工学院生命健康技术学院",
+    "type": "University",
+    "city": "Dongguan",
+    "fields": [
+      "AIH",
+      "NE"
+    ],
+    "website": "https://www.dgut.edu.cn",
+    "verified": true,
+    "hook": "Intelligent medical engineering teaching programme in Songshan Lake; relevant for technician/engineering talent and for cheap prototyping capacity, not for research leadership."
+  },
+  {
+    "name": "Great Bay University",
+    "native": "大湾区大学",
+    "type": "University",
+    "city": "Dongguan",
+    "fields": [
+      "CN",
+      "NAI",
+      "CS"
+    ],
+    "website": "https://www.gbu.edu.cn",
+    "verified": true,
+    "hook": "Approved by the Ministry of Education in June 2025; holds a Guangdong key lab on dynamical systems and nervous-system cross-disciplinary research."
+  },
+  {
+    "name": "Guangdong Medical University — School of Biomedical Engineering",
+    "native": "广东医科大学生物医学工程学院（未来技术学院）",
+    "type": "University",
+    "city": "Dongguan",
+    "fields": [
+      "AIH",
+      "NE"
+    ],
+    "website": "https://swyxgc.gdmu.edu.cn",
+    "verified": true,
+    "hook": "Medical-electronics and imaging department with a Dongguan key lab in medical electronics and imaging equipment, plus a GBA lab on AI and cardiovascular/cerebrovascular engineering — AI-for-health rather than BCI."
+  },
+  {
+    "name": "Guangdong Biomedical Engineering Society",
+    "native": "广东省生物医学工程学会",
+    "type": "Industry association",
+    "city": "Guangzhou",
+    "fields": [
+      "NE",
+      "AIH"
+    ],
+    "website": "http://gdsbme.com",
+    "verified": true,
+    "hook": "Provincial BME society based at Jinan University: annual conference, science award, standards and specialist branches."
+  },
+  {
+    "name": "Guangzhou Institutes of Biomedicine and Health (GIBH), CAS",
+    "native": "中国科学院广州生物医药与健康研究院",
+    "type": "Research institute",
+    "city": "Guangzhou",
+    "fields": [
+      "NB",
+      "AIH"
+    ],
+    "website": "https://english.gibh.cas.cn",
+    "verified": true,
+    "hook": "Neuro-adjacent rather than neuro-core: stem-cell, gene-editing and disease-model platforms that feed neuro-biotech pipelines."
+  },
+  {
+    "name": "Jinan University — GHM Institute of CNS Regeneration (GHMICR)",
+    "native": "暨南大学粤港澳中枢神经再生研究院",
+    "type": "University institute",
+    "city": "Guangzhou",
+    "fields": [
+      "NB",
+      "NE",
+      "CN"
+    ],
+    "website": "https://ghmicr.jnu.edu.cn",
+    "verified": true,
+    "hook": "The GBA's anchor for CNS regeneration and repair (spinal cord injury, optic nerve), led by Kwok-Fai So (苏国辉); strong neuro-biotech and clinical-translation profile."
+  },
+  {
+    "name": "Pazhou Laboratory (AI & Digital Economy Guangdong Laboratory)",
+    "native": "琶洲实验室（人工智能与数字经济广东省实验室·广州）",
+    "type": "Research institute",
+    "city": "Guangzhou",
+    "fields": [
+      "BCI",
+      "NAI",
+      "AIH",
+      "CN"
+    ],
+    "website": "https://www.pazhoulab.com",
+    "verified": true,
+    "hook": "Has both a brain-machine intelligence centre (non-invasive BCI, brain-controlled dual-arm robots) and a brain disease & health centre — the most product-oriented BCI lab in the region."
+  },
+  {
+    "name": "South China Normal University (SCNU) — Institute for Brain Research and Rehabilitation",
+    "native": "华南师范大学脑科学与康复医学研究院",
+    "type": "University institute",
+    "city": "Guangzhou",
+    "fields": [
+      "CS",
+      "BCI",
+      "NE",
+      "NB"
+    ],
+    "website": "http://ibrr.scnu.edu.cn",
+    "verified": true,
+    "hook": "Established Dec 2015 under the national brain programme; cognitive/educational neuroscience plus a BCI device programme ('智脑协生') and a Ministry of Education key lab in brain cognition and educational science."
+  },
+  {
+    "name": "South China University of Technology (SCUT) — BCI & Brain Information Processing Center",
+    "native": "华南理工大学脑机接口与脑信息处理研究中心",
+    "type": "University lab",
+    "city": "Guangzhou",
+    "fields": [
+      "BCI",
+      "NE",
+      "NAI"
+    ],
+    "website": "https://www.scut.edu.cn",
+    "verified": true,
+    "hook": "Led by Li Yuanqing (IEEE Fellow): non-invasive BCI, brain-controlled wheelchair/home systems, BCI + speech fusion; co-founder of the Pazhou Lab brain-machine intelligence centre."
+  },
+  {
+    "name": "City University of Hong Kong (CityU) — Department of Biomedical Engineering",
+    "native": "香港城市大学生物医学工程学系",
+    "type": "University",
+    "city": "Hong Kong",
+    "fields": [
+      "NE",
+      "BCI",
+      "NAI",
+      "AIH"
+    ],
+    "website": "https://www.cityu.edu.hk/bme",
+    "verified": true,
+    "hook": "Neural engineering group (e.g. Peng Shi) plus 'AI in biomedical engineering' teaching; strong micro-device and neural-interface fabrication."
+  },
+  {
+    "name": "Hong Kong Baptist University (HKBU) — Imaging & social neuroscience",
+    "native": "香港浸会大学",
+    "type": "University",
+    "city": "Hong Kong",
+    "fields": [
+      "CS",
+      "NE",
+      "AIH",
+      "NMI"
+    ],
+    "website": "https://www.hkbu.edu.hk",
+    "verified": true,
+    "hook": "Life Science Imaging Centre with 3T MRI, EEG and fNIRS (rare for a HK liberal-arts university) and an active social-neuroscience lab doing tDCS/TMS and digital therapeutics."
+  },
+  {
+    "name": "Hong Kong Center for Neurodegenerative Diseases (HKCeND)",
+    "native": "香港神经退行性疾病中心",
+    "type": "Research institute",
+    "city": "Hong Kong",
+    "fields": [
+      "NB",
+      "CN",
+      "AIH"
+    ],
+    "website": "https://www.hkcend.org",
+    "verified": true,
+    "hook": "InnoHK-funded translational centre spanning risk factors, mechanisms, targets and therapeutics — a sponsor/partner candidate for neuro-biotech content."
+  },
+  {
+    "name": "The Chinese University of Hong Kong (CUHK) — Brain and Mind Institute",
+    "native": "香港中文大学大脑与认知研究所",
+    "type": "University institute",
+    "city": "Hong Kong",
+    "fields": [
+      "CS",
+      "CN",
+      "NB",
+      "NE"
+    ],
+    "website": "https://bmi.cuhk.edu.hk",
+    "verified": true,
+    "hook": "HK's first institute consolidating cognitive neuroscience with linguistics, otolaryngology and paediatrics; plus the Gerald Choa Neuroscience Institute (2016) and a BME department."
+  },
+  {
+    "name": "The Education University of Hong Kong (EdUHK) — Centre for Brain and Education",
+    "native": "香港教育大学脑与教育中心",
+    "type": "University centre",
+    "city": "Hong Kong",
+    "fields": [
+      "CS",
+      "AIH"
+    ],
+    "website": "https://www.eduhk.hk",
+    "verified": false,
+    "hook": "Brain-and-education centre (opened with an international symposium on brain and education); the natural partner for educational-neuroscience programming aimed at teachers/parents."
+  },
+  {
+    "name": "The Hong Kong Polytechnic University (PolyU) — BME + RCLCN",
+    "native": "香港理工大学（生物医学工程学系 / 语言认知神经科学研究中心）",
+    "type": "University",
+    "city": "Hong Kong",
+    "fields": [
+      "NE",
+      "CS",
+      "BCI",
+      "NMI"
+    ],
+    "website": "https://www.polyu.edu.hk/rclcn",
+    "verified": true,
+    "hook": "Research Centre for Language, Cognition and Neuroscience (est. Jan 2019) uses EEG, fNIRS and MRI for neurolinguistics; BME department supplies the hardware/neuroengineering side."
+  },
+  {
+    "name": "The Hong Kong University of Science and Technology (HKUST)",
+    "native": "香港科技大学",
+    "type": "University",
+    "city": "Hong Kong",
+    "fields": [
+      "NB",
+      "CN",
+      "NE",
+      "NM"
+    ],
+    "website": "https://science.hkust.edu.hk/research/schemes/neuroscience",
+    "verified": true,
+    "hook": "State Key Lab of Molecular Neuroscience (neurodegeneration, regeneration, drug development) plus a neuroscience research scheme and a biomedical engineering division; the HK anchor of the Shenzhen–HK brain institute."
+  },
+  {
+    "name": "The University of Hong Kong (HKU) — State Key Lab of Brain and Cognitive Sciences",
+    "native": "香港大学脑与认知科学国家重点实验室",
+    "type": "University lab",
+    "city": "Hong Kong",
+    "fields": [
+      "CS",
+      "CN",
+      "NE"
+    ],
+    "website": "https://sklbrain.hku.hk",
+    "verified": true,
+    "hook": "China's Ministry of Science and Technology-approved state key lab for brain and cognitive sciences; psychology department also runs social/cognitive neuroscience and neuropsychology labs with MRI/EEG."
+  },
+  {
+    "name": "neuroHK",
+    "native": "香港神经科学网络",
+    "type": "Network",
+    "city": "Hong Kong",
+    "fields": [
+      "CS",
+      "CN",
+      "NB",
+      "NE",
+      "BCI"
+    ],
+    "website": "https://www.neurohk.org",
+    "verified": true,
+    "hook": "A meta-organisation that catalogs HK neuroscience labs by discipline — including a dedicated 'Neurotechnology' category — across 7 universities. Best single entry point for a HK speaker pipeline."
+  },
+  {
+    "name": "University of Macau — Centre for Cognitive and Brain Sciences (CCBS)",
+    "native": "澳门大学认知与脑科学研究中心",
+    "type": "University centre",
+    "city": "Macau",
+    "fields": [
+      "CS",
+      "CN",
+      "BCI"
+    ],
+    "website": "https://ccbs.ici.um.edu.mo",
+    "verified": true,
+    "hook": "Offers a PhD in Brain and Cognitive Sciences and an MSc in Cognitive Neuroscience; multilingual/multicultural brain research; joint lab with GDIIST on cognition and brain-inspired intelligence."
+  },
+  {
+    "name": "AIRS — Shenzhen Institute of Artificial Intelligence and Robotics for Society",
+    "native": "深圳市人工智能与机器人研究院",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "AIH",
+      "NE",
+      "NAI"
+    ],
+    "website": "https://airs.cuhk.edu.cn",
+    "verified": true,
+    "hook": "One of Shenzhen's ten municipal basic-research institutes; medical robotics centre (flexible/micro-nano robots, image-guided intervention) is the natural AI-for-health counterpart to the brain institutes."
+  },
+  {
+    "name": "Brain Cognition and Brain Disease Institute (BCBDI)",
+    "native": "脑认知与脑疾病研究所",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "BCI",
+      "NE",
+      "NM",
+      "CN",
+      "NB"
+    ],
+    "website": "https://bcbdi.siat.ac.cn",
+    "verified": true,
+    "hook": "Implantable flexible-electrode BCI (Li Xiaojian) and wearable non-invasive BCI (Wei Pengfei); also runs a brain-cognition / brain-inspired-intelligence centre."
+  },
+  {
+    "name": "Global BCI Application Demonstration Center",
+    "native": "全球脑机接口应用示范中心",
+    "type": "Industry",
+    "city": "Shenzhen",
+    "fields": [
+      "BCI"
+    ],
+    "website": null,
+    "verified": false,
+    "hook": "Public BCI experience centre opened in Huaqiangbei in October 2026, operated by Macrotellect with the subdistrict office."
+  },
+  {
+    "name": "HKU-Shenzhen Hospital",
+    "native": "香港大学深圳医院",
+    "type": "Hospital",
+    "city": "Shenzhen",
+    "fields": [
+      "AIH",
+      "BCI",
+      "NB"
+    ],
+    "website": "https://www.hku-szh.org",
+    "verified": false,
+    "hook": "Clinical neuroscience centre (neurology + neurosurgery) that recruits postdocs in neuromedicine; the practical place to reach Shenzhen patients for any BCI/neuromodulation study."
+  },
+  {
+    "name": "Harbin Institute of Technology, Shenzhen (HITSZ)",
+    "native": "哈尔滨工业大学（深圳）",
+    "type": "University",
+    "city": "Shenzhen",
+    "fields": [
+      "NE",
+      "NM",
+      "BCI",
+      "AIH"
+    ],
+    "website": "https://bme.hitsz.edu.cn",
+    "verified": true,
+    "hook": "Brand-new School of Medical Engineering whose three declared directions are intelligent perception & medical equipment, neural information & brain-inspired intelligence, and bioinformatics & intelligent pharma."
+  },
+  {
+    "name": "Institute for Brain Research Advanced Interfaces and Neurotechnologies (i-BRAIN)",
+    "native": "i-BRAIN 脑机接口与神经技术研究所",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "BCI",
+      "NE",
+      "NB"
+    ],
+    "website": "https://ibrain.smart.org.cn",
+    "verified": true,
+    "hook": "Implantable nanoelectronic interfaces led by Charles Lieber — the highest-profile BCI lab physically in Shenzhen; expect press sensitivity."
+  },
+  {
+    "name": "Peking University Shenzhen Graduate School",
+    "native": "北京大学深圳研究生院",
+    "type": "University",
+    "city": "Shenzhen",
+    "fields": [
+      "NM",
+      "NAI",
+      "CN"
+    ],
+    "website": "https://www.pkusz.edu.cn",
+    "verified": true,
+    "hook": "Institute of Brain-Inspired Intelligence plus a brain-inspired chip centre (memristors, compute-in-memory) in the School of ECE — the clearest neuromorphic-silicon group in Shenzhen."
+  },
+  {
+    "name": "Peng Cheng Laboratory (PCL)",
+    "native": "鹏城实验室",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "NAI",
+      "NM",
+      "AIH"
+    ],
+    "website": "https://www.pcl.ac.cn",
+    "verified": true,
+    "hook": "National-lab compute (Pengcheng Cloud Brain) and 'Cloud Brain and Mind' model work — relevant as compute/infra sponsor rather than as a neuroscience partner."
+  },
+  {
+    "name": "Shenzhen Brain Science Infrastructure (Brain Analysis & Simulation)",
+    "native": "脑解析与脑模拟重大科技基础设施（脑设施）",
+    "type": "Research infrastructure",
+    "city": "Shenzhen",
+    "fields": [
+      "NE",
+      "CN",
+      "NB"
+    ],
+    "website": "https://www.shibs.cn/platform/facilities",
+    "verified": true,
+    "hook": "50,000 m² class facility with whole-brain mapping, non-human primate and behaviour platforms — the obvious venue/lab-tour anchor for a Shenzhen delegation visit."
+  },
+  {
+    "name": "Shenzhen Brain Science Society",
+    "native": "深圳市脑科学学会",
+    "type": "Non-profit",
+    "city": "Shenzhen",
+    "fields": [
+      "CS",
+      "BCI",
+      "NE"
+    ],
+    "website": null,
+    "verified": false,
+    "hook": "Organiser of the Shenzhen Brain Expo (脑博会) and founder of its BCI & human-machine intelligence branch — the single most direct route to a Shenzhen speaker roster or booth."
+  },
+  {
+    "name": "Shenzhen Institute of Advanced Technology, CAS",
+    "native": "中国科学院深圳先进技术研究院",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "NE",
+      "BCI",
+      "NM",
+      "NAI",
+      "AIH",
+      "NMI",
+      "NBOT"
+    ],
+    "website": "https://www.siat.ac.cn",
+    "verified": true,
+    "hook": "Parent body of BCBDI, SHIBS, the Brain Science Infrastructure and SUAT — the single most useful door into Shenzhen brain science."
+  },
+  {
+    "name": "Shenzhen Institute of Neuroscience (SION)",
+    "native": "深圳市神经科学研究院",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "CS",
+      "BCI",
+      "NE"
+    ],
+    "website": "https://www.sions.cn",
+    "verified": true,
+    "hook": "100+ PIs; language/motor/memory mapping and cortical-function rehabilitation — a clinical-translation partner rather than a university lab."
+  },
+  {
+    "name": "Shenzhen Medical Academy of Research and Translation (SMART)",
+    "native": "深圳医学科学院",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "NB",
+      "AIH",
+      "BCI",
+      "CN"
+    ],
+    "website": "https://smart.org.cn",
+    "verified": false,
+    "hook": "Newest and best-funded neuro-biotech address in Shenzhen (Institute of Neuromodulation and Cognition); likely the strongest sponsor/partner for a NeuroAI-for-health track."
+  },
+  {
+    "name": "Shenzhen University (SZU) — Psychology & Biomedical Engineering",
+    "native": "深圳大学（心理学院 / 医学部生物医学工程学院）",
+    "type": "University",
+    "city": "Shenzhen",
+    "fields": [
+      "CS",
+      "BCI",
+      "NE",
+      "AIH",
+      "NMI"
+    ],
+    "website": "https://psy.szu.edu.cn",
+    "verified": true,
+    "hook": "Only Shenzhen university with both a psychology school doing cognitive neuroscience/BCI and a BME school running a 'brain-computer intelligence and neural engineering' track; runs a BCI seminar series with its first affiliated hospital."
+  },
+  {
+    "name": "Shenzhen University of Advanced Technology (SUAT)",
+    "native": "深圳理工大学",
+    "type": "University",
+    "city": "Shenzhen",
+    "fields": [
+      "NB",
+      "CS",
+      "BCI",
+      "AIH"
+    ],
+    "website": "https://www.suat-sz.edu.cn",
+    "verified": true,
+    "hook": "University-level home of the 'Neher brain science class', a neurobiology department and the Shenzhen brain-science industry innovation centre — the venue of the 2025 Shenzhen Brain Expo."
+  },
+  {
+    "name": "Shenzhen-Hong Kong Institute of Brain Science (SHIBS)",
+    "native": "深港脑科学创新研究院",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "CS",
+      "CN",
+      "BCI",
+      "NB"
+    ],
+    "website": "https://www.shibs.cn",
+    "verified": true,
+    "hook": "The formal Shenzhen–Hong Kong brain-science bridge (70+ teams at last public count) — natural co-organiser for a cross-border NTX programme."
+  },
+  {
+    "name": "Southern University of Science and Technology (SUSTech)",
+    "native": "南方科技大学",
+    "type": "University",
+    "city": "Shenzhen",
+    "fields": [
+      "NB",
+      "NE",
+      "CS",
+      "BCI"
+    ],
+    "website": "https://med.sustech.edu.cn",
+    "verified": true,
+    "hook": "Department of Medical Neuroscience plus a joint Centre for Neuroscience and Neural Engineering with the University of Queensland — the most research-intensive university lab base in Shenzhen."
+  },
+  {
+    "name": "Sun Yat-sen University (SYSU) — Biomedical Engineering & Psychology",
+    "native": "中山大学（生物医学工程学院 / 心理学系）",
+    "type": "University",
+    "city": "Shenzhen",
+    "fields": [
+      "BCI",
+      "NE",
+      "CS",
+      "AIH"
+    ],
+    "website": "https://www.sysu.edu.cn",
+    "verified": true,
+    "hook": "SYSU's School of Biomedical Engineering sits in Shenzhen's Guangming district and works on flexible neural recording, neuromodulation and BCI devices; SYSU also hosts a psychology department."
+  },
+  {
+    "name": "The Chinese University of Hong Kong, Shenzhen (CUHK-SZ)",
+    "native": "香港中文大学（深圳）",
+    "type": "University",
+    "city": "Shenzhen",
+    "fields": [
+      "AIH",
+      "NB",
+      "BCI"
+    ],
+    "website": "https://med.cuhk.edu.cn",
+    "verified": true,
+    "hook": "School of Medicine with neurosurgery leadership and a recurring brain-science / brain-technology summit; strongest Shenzhen bridge to CUHK's Hong Kong neuroscience base."
+  },
+  {
+    "name": "Tsinghua Shenzhen International Graduate School (SIGS)",
+    "native": "清华大学深圳国际研究生院",
+    "type": "University",
+    "city": "Shenzhen",
+    "fields": [
+      "NE",
+      "AIH",
+      "NAI"
+    ],
+    "website": "https://www.sigs.tsinghua.edu.cn",
+    "verified": true,
+    "hook": "Biomedical engineering and health-engineering institutes with device/imaging work; useful for engineering talent, less for pure neuroscience."
+  },
+  {
+    "name": "Guangdong Institute of Intelligence Science and Technology (GDIIST)",
+    "native": "广东省智能科学与技术研究院",
+    "type": "Research institute",
+    "city": "Zhuhai",
+    "fields": [
+      "NM",
+      "BCI",
+      "CN",
+      "NAI"
+    ],
+    "website": "https://www.gdiist.cn",
+    "verified": true,
+    "hook": "The region's neuromorphic flagship: LYRA-β Max brain-inspired chips, a 100-billion-neuron brain-inspired heterogeneous supercomputer, and a 'dream BCI' device; five directions include BCI & neuromodulation and general brain-inspired computing systems."
+  },
+  {
+    "name": "Shenzhen People's Hospital — Brain-Computer Interface & Neuromodulation Centre",
+    "native": "深圳市人民医院 — 脑机接口及神经调控综合诊疗中心",
+    "type": "Hospital",
+    "city": "Shenzhen",
+    "fields": [
+      "NMI",
+      "BCI"
+    ],
+    "website": "https://www.szhospital.com",
+    "verified": true,
+    "hook": "Opened October 2025 as the first public-hospital BCI and neuromodulation centre in Shenzhen, combining invasive/non-invasive BCI with stimulation-based treatment for stroke, epilepsy, Parkinson's, Alzheimer's, insomnia and depression — the clearest clinical doorway in the city for device trials and patient-facing pilots."
+  },
+  {
+    "name": "Shenzhen Rehand Medical Technology (Rehand)",
+    "native": "深圳睿瀚医疗科技有限公司",
+    "type": "Industry",
+    "city": "Shenzhen",
+    "fields": [
+      "NBOT",
+      "BCI"
+    ],
+    "website": "https://www.rxheal.cn",
+    "verified": true,
+    "hook": "Builds brain-controlled rehabilitation robots: EEG-driven hand and upper-limb training devices for stroke recovery, sold as clinical rehab systems — an industry partner for any project that needs a robot on the motor end of a BCI loop."
+  },
+  {
+    "name": "MileBot Robotics (Shenzhen Maibu Robotics)",
+    "native": "深圳市迈步机器人科技有限公司",
+    "type": "Industry",
+    "city": "Shenzhen",
+    "fields": [
+      "NBOT"
+    ],
+    "website": "https://www.milebot.com.cn",
+    "verified": true,
+    "hook": "Rehabilitation and mobility exoskeletons using flexible actuators — the actuation half of neurobotics, pairing naturally with a BCI or gait-intent decoder for closed-loop walking rehab."
+  },
+  {
+    "name": "SIAT — Center for Intelligent Bionics",
+    "native": "中国科学院深圳先进技术研究院 — 智能仿生研究中心",
+    "type": "Research institute",
+    "city": "Shenzhen",
+    "fields": [
+      "NBOT",
+      "NE"
+    ],
+    "website": "https://znfs.siat.ac.cn",
+    "verified": true,
+    "hook": "SIAT's bionics centre works on intelligent rehab robotics for limb function reconstruction, including a bionic upper-limb assist system for motor impairment — the research counterpart to Shenzhen's rehab-robot industry."
+  },
+  {
+    "name": "Guangzhou Brain Hospital (Guangzhou Medical University)",
+    "native": "广州医科大学附属脑科医院（广州市惠爱医院）",
+    "type": "Hospital",
+    "city": "Guangzhou",
+    "fields": [
+      "NMI"
+    ],
+    "website": "https://www.gzbrain.cn",
+    "verified": false,
+    "hook": "China's first psychiatric hospital (1898), Grade-3A, whose physiotherapy department runs high-volume rTMS alongside MECT — a large clinical base for non-invasive neuromodulation. Listed but not site-verified: the hospital's website returns 403 to automated reads."
+  },
+  {
+    "name": "Shenzhen Kangning Hospital (Shenzhen Mental Health Centre)",
+    "native": "深圳市康宁医院（深圳市精神卫生中心）",
+    "type": "Hospital",
+    "city": "Shenzhen",
+    "fields": [
+      "NMI"
+    ],
+    "website": "https://www.szknyy.com",
+    "verified": false,
+    "hook": "Shenzhen's Grade-3A psychiatric hospital and municipal mental-health centre (Luohu and Pingshan campuses); its rehabilitation physiotherapy unit runs accelerated rTMS. Listed but not site-verified: the website is a JS shell that cannot be read."
+  }
+]

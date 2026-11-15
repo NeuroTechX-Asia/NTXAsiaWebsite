@@ -1,0 +1,60 @@
+{
+  "note": "Community imagery manifest. Photographs come from the NeuroTechX Drive (Buzz in Review 2020 — Toronto and Montreal chapter events), cropped to the site's slots. Replace paths/alt to swap in photographs from NTX Asia events (Hong Kong, Shenzhen, Guangzhou, Macao) as they arrive.",
+  "placeholder": false,
+  "gallery": [
+    {
+      "src": "/assets/community/gallery-1.jpg",
+      "source": "NTX Drive · Buzz in Review 2020 · TO/HA",
+      "credit": "NeuroTechX",
+      "alt": {
+        "zh": "多伦多分会活动上的脑机接口演示台",
+        "en": "A BCI demo table at the Toronto chapter event"
+      }
+    },
+    {
+      "src": "/assets/community/gallery-2.jpg",
+      "source": "NTX Drive · Buzz in Review 2020 · TO/HA",
+      "credit": "NeuroTechX",
+      "alt": {
+        "zh": "多伦多分会活动现场听众",
+        "en": "The audience at the Toronto chapter event"
+      }
+    },
+    {
+      "src": "/assets/community/gallery-3.jpg",
+      "source": "NTX Drive · Buzz in Review 2020 · TO/HA · 20200118_162909",
+      "credit": "NeuroTechX",
+      "alt": {
+        "zh": "分会活动开场前的 The Atrium 会场",
+        "en": "The Atrium filling up before a chapter event"
+      }
+    },
+    {
+      "src": "/assets/community/gallery-4.jpg",
+      "source": "NTX Drive · Buzz in Review 2020 · MTL · BIR2020-Food1",
+      "credit": "NeuroTechX",
+      "alt": {
+        "zh": "茶歇时间：自助餐台前的交流",
+        "en": "Catering and conversation between sessions"
+      }
+    },
+    {
+      "src": "/assets/community/gallery-5.jpg",
+      "source": "NTX Drive · Buzz in Review 2020 · TO/HA",
+      "credit": "NeuroTechX",
+      "alt": {
+        "zh": "分会活动中的交流与展台",
+        "en": "Talking and demos between sessions"
+      }
+    }
+  ],
+  "events": {
+    "src": "/assets/community/events-community.jpg",
+    "source": "NTX Drive · Buzz in Review 2020 · TO/HA · 20200118_135811",
+    "credit": "NeuroTechX",
+    "alt": {
+      "zh": "NeuroTechX 分会活动现场的签到台与展架",
+      "en": "The registration desk and NeuroTechX banner at a chapter event"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+# Python tooling for the NTXAsiaWebsite conda environment.
+# The website itself is Next.js (Node) — Vercel does not run pip packages.
+# These packages drive the asset/content pipeline in scripts/.
+
+pillow>=10.4          # generate_assets.py — social card rendering
+requests>=2.32        # fetching sources / future Notion sync
+beautifulsoup4>=4.12  # parsing institutional pages for directory updates
+markdown>=3.7         # turning markdown notes into content blocks
+pyyaml>=6.0           # content/config files

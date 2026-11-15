@@ -1,0 +1,173 @@
+[
+  {
+    "id": "hongkong",
+    "name": {
+      "zh": "香港",
+      "en": "Hong Kong"
+    },
+    "country": {
+      "zh": "中国",
+      "en": "China"
+    },
+    "lat": 22.3193,
+    "lon": 114.1694,
+    "x": 65.88,
+    "y": 48.78,
+    "status": "forming",
+    "dx": -14,
+    "dy": 4,
+    "anchor": "right"
+  },
+  {
+    "id": "shenzhen",
+    "name": {
+      "zh": "深圳",
+      "en": "Shenzhen"
+    },
+    "country": {
+      "zh": "中国",
+      "en": "China"
+    },
+    "lat": 22.5431,
+    "lon": 114.0579,
+    "x": 65.77,
+    "y": 48.44,
+    "status": "forming",
+    "dx": 13,
+    "dy": -15,
+    "anchor": "left"
+  },
+  {
+    "id": "shanghai",
+    "name": {
+      "zh": "上海",
+      "en": "Shanghai"
+    },
+    "country": {
+      "zh": "中国",
+      "en": "China"
+    },
+    "lat": 31.2304,
+    "lon": 121.4737,
+    "x": 72.83,
+    "y": 35.48,
+    "status": "forming",
+    "dx": 13,
+    "dy": -2,
+    "anchor": "left"
+  },
+  {
+    "id": "tokyo",
+    "name": {
+      "zh": "东京",
+      "en": "Tokyo"
+    },
+    "country": {
+      "zh": "日本",
+      "en": "Japan"
+    },
+    "lat": 35.6762,
+    "lon": 139.6503,
+    "x": 90.14,
+    "y": 28.84,
+    "status": "forming",
+    "dx": -13,
+    "dy": 0,
+    "anchor": "right"
+  },
+  {
+    "id": "mumbai",
+    "name": {
+      "zh": "孟买",
+      "en": "Mumbai"
+    },
+    "country": {
+      "zh": "印度",
+      "en": "India"
+    },
+    "lat": 19.076,
+    "lon": 72.8777,
+    "x": 26.55,
+    "y": 53.62,
+    "status": "listed",
+    "dx": -14,
+    "dy": 2,
+    "anchor": "right"
+  },
+  {
+    "id": "bengaluru",
+    "name": {
+      "zh": "班加罗尔",
+      "en": "Bengaluru"
+    },
+    "country": {
+      "zh": "印度",
+      "en": "India"
+    },
+    "lat": 12.9716,
+    "lon": 77.5946,
+    "x": 31.04,
+    "y": 62.73,
+    "status": "listed",
+    "dx": -14,
+    "dy": 6,
+    "anchor": "right"
+  },
+  {
+    "id": "chennai",
+    "name": {
+      "zh": "金奈",
+      "en": "Chennai"
+    },
+    "country": {
+      "zh": "印度",
+      "en": "India"
+    },
+    "lat": 13.0827,
+    "lon": 80.2707,
+    "x": 33.59,
+    "y": 62.56,
+    "status": "listed",
+    "dx": 14,
+    "dy": 10,
+    "anchor": "left"
+  },
+  {
+    "id": "kolkata",
+    "name": {
+      "zh": "加尔各答",
+      "en": "Kolkata"
+    },
+    "country": {
+      "zh": "印度",
+      "en": "India"
+    },
+    "lat": 22.5726,
+    "lon": 88.3639,
+    "x": 41.3,
+    "y": 48.4,
+    "status": "listed",
+    "dx": -14,
+    "dy": -4,
+    "anchor": "right"
+  },
+  {
+    "id": "singapore",
+    "name": {
+      "zh": "新加坡",
+      "en": "Singapore"
+    },
+    "country": {
+      "zh": "新加坡",
+      "en": "Singapore"
+    },
+    "lat": 1.3521,
+    "lon": 103.8198,
+    "x": 56.02,
+    "y": 80.07,
+    "status": "reboot",
+    "dx": 13,
+    "dy": 10,
+    "anchor": "left"
+  }
+]

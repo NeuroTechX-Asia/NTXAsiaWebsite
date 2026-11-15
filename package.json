@@ -1,0 +1,27 @@
+{
+  "name": "neurotechx-asia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NeuroTechX Asia - China — Chinese-language community site (Vercel / Next.js)",
+  "scripts": {
+    "dev": "next dev -p 3100",
+    "build": "next build",
+    "start": "next start -p 3100",
+    "assets": "python scripts/generate_assets.py",
+    "ecosystem": "python scripts/build_ecosystem_data.py"
+  },
+  "dependencies": {
+    "delaunator": "^5.1.0",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.19"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}
