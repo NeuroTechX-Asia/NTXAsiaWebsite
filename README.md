@@ -33,7 +33,26 @@ npm run build
 npm start
 ```
 
+## Repository
+
+Remote: <https://github.com/NeuroTechX-Asia/NTXAsiaWebsite> (private, `main`). Local checkout:
+
+```bash
+git clone https://github.com/NeuroTechX-Asia/NTXAsiaWebsite.git
+cd NTXAsiaWebsite
+npm install
+```
+
+`.env.local` is gitignored — recreate it from `.env.example` (only `CONTACT_EMAIL` is required;
+without it the contact dialog reports itself unconfigured).
+
 ## Deploy to Vercel
+
+Connect the repository in the Vercel team `neuro-tech-x-asia` (Framework preset: Next.js,
+root directory `./`, region `hkg1` from `vercel.json`) and set the environment variables from
+`.env.example` — `CONTACT_EMAIL` at minimum, `RESEND_API_KEY` when the form should send mail.
+
+Command line, for a project linked by hand:
 
 ```bash
 npm i -g vercel
