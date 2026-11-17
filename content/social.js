@@ -7,24 +7,24 @@
  * Discord and WhatsApp are invite links that expire and get harvested, so they
  * are not written into the markup.
  *
- * Order follows the Asia community first (Discord, WhatsApp), the global
- * NeuroTechX accounts last.
+ * Order is the community's own: the two chat channels first, then the social
+ * accounts from the regional X handle through to the global NeuroTechX ones.
  */
 export const SOCIAL_CHANNELS = [
+  { id: "whatsapp", label: "WhatsApp", guarded: true },
   { id: "discord", label: "Discord", guarded: true },
+  {
+    id: "x",
+    label: "X",
+    href: "https://x.com/NeurotechXAsia/",
+    note: "@NeurotechXAsia",
+  },
   {
     id: "slack",
     label: "Slack",
     // the join form neurotechx.org itself points its "JOIN SLACK" link at
     href: "https://docs.google.com/forms/d/e/1FAIpQLSfZyzhVdOLU8_oQ4NylHL8EFoKLIVmryGXA4u7HDsZpkTryvg/viewform",
     note: "neurotechx.org",
-  },
-  { id: "whatsapp", label: "WhatsApp", guarded: true },
-  {
-    id: "github",
-    label: "GitHub",
-    href: "https://github.com/NeuroTechX-Asia",
-    note: "NeuroTechX Asia",
   },
   {
     id: "linkedin",
@@ -37,6 +37,12 @@ export const SOCIAL_CHANNELS = [
     label: "Facebook",
     href: "https://www.facebook.com/neurotechx",
     note: "NeuroTechX",
+  },
+  {
+    id: "github",
+    label: "GitHub",
+    href: "https://github.com/NeuroTechX-Asia",
+    note: "NeuroTechX Asia",
   },
   {
     id: "huggingface",
