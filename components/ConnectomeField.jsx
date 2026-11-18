@@ -129,33 +129,69 @@ function edgeCurve(a, b, bow) {
 
 function buildField(rand, W, H, scale, density) {
   const area = (W * H) / (1920 * 1080);
-  const count = Math.max(16, Math.round(54 * Math.sqrt(area) * density));
+  const count = Math.max(16, Math.round(64 * Math.sqrt(area) * density));
 
-  // Modules: connectomes are clustered, not uniformly sprinkled. Centres are
-  // placed on a jittered grid so modules fill the frame without overlapping.
-  const modules = Math.max(5, Math.round(7 * density));
-  const cols = Math.ceil(Math.sqrt(modules * (W / H)));
-  const rows = Math.ceil(modules / cols);
-  const centres = [];
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (centres.length >= modules) break;
-      centres.push([
-        ((c + 0.5) / cols) * W + (rand() - 0.5) * (W / cols) * 0.55,
-        ((r + 0.5) / rows) * H + (rand() - 0.5) * (H / rows) * 0.55,
-      ]);
+  // Composition: tissue is packed into the right, the bottom and especially the
+  // bottom-right corner, and thins out toward the left edge so the left column of
+  // the layout stays quiet. One function drives modules, somata and scatter, so
+  // the gradient is consistent instead of three independent biases.
+  const densityAt = (x, y) => {
+    const nx = Math.min(1, Math.max(0, x / W));
+    const ny = Math.min(1, Math.max(0, y / H));
+    const sx = 0.16 + 0.84 * Math.pow(nx, 2.0); // left -> right
+    const sy = 0.2 + 0.8 * Math.pow(ny, 1.5); // top -> bottom
+    return sx * sy; // 0.03 at the top-left, 1 at the bottom-right
+  };
+
+  // rejection sampling against that field
+  const sample = () => {
+    for (let tries = 0; tries < 80; tries++) {
+      const x = rand() * W;
+      const y = rand() * H;
+      if (rand() < densityAt(x, y)) return [x, y];
     }
+    const x = rand() * W;
+    return [x, rand() * H];
+  };
+
+  // Module centres, spread out but themselves weighted by the same field, so the
+  // clusters sit where the density is. Minimum separation keeps them legible.
+  const modules = Math.max(4, Math.round(7 * density));
+  const centres = [];
+  const minSep = Math.min(W, H) * 0.15;
+  for (let tries = 0; tries < 600 && centres.length < modules; tries++) {
+    const [x, y] = sample();
+    if (centres.every(([cx, cy]) => Math.hypot(cx - x, cy - y) > minSep)) centres.push([x, y]);
   }
 
+  const centreWeights = centres.map(([x, y]) => densityAt(x, y));
+  const weightSum = centreWeights.reduce((a, b) => a + b, 0) || 1;
+  const pickCentre = () => {
+    let r = rand() * weightSum;
+    for (let k = 0; k < centres.length; k++) {
+      r -= centreWeights[k];
+      if (r <= 0) return k;
+    }
+    return centres.length - 1;
+  };
+
+  const clusterR = 0.17 * Math.min(W, H);
   const nodes = [];
   for (let i = 0; i < count; i++) {
-    const scatter = i % 7 === 0; // a few somata sit between modules
-    const [cx, cy] = centres[Math.floor(rand() * centres.length)];
-    const spreadR = (0.42 * Math.min(W / cols, H / rows) + 30 * scale) * (scatter ? 2.1 : 1);
-    const a = rand() * Math.PI * 2;
-    const r = Math.sqrt(rand()) * spreadR;
-    const x = Math.min(W - 8, Math.max(8, cx + Math.cos(a) * r));
-    const y = Math.min(H - 8, Math.max(8, cy + Math.sin(a) * r));
+    let x;
+    let y;
+    if (i % 7 === 0) {
+      // a few somata sit between modules, on the same gradient
+      [x, y] = sample();
+    } else {
+      const [cx, cy] = centres[pickCentre()];
+      const r = Math.sqrt(rand()) * clusterR * (0.7 + rand() * 0.6);
+      const a = rand() * Math.PI * 2;
+      x = cx + Math.cos(a) * r;
+      y = cy + Math.sin(a) * r;
+    }
+    x = Math.min(W - 8, Math.max(8, x));
+    y = Math.min(H - 8, Math.max(8, y));
     nodes.push({ ...buildSoma(rand, x, y, scale), module: 0 });
   }
 
