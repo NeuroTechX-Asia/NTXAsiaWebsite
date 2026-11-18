@@ -21,7 +21,7 @@
  *   - a static dither overlay replaces the video's ±5 grain, killing banding
  */
 import { useState } from "react";
-import ConstellationMesh from "./ConstellationMesh";
+import ConnectomeMesh from "./ConnectomeMesh";
 
 const BRAND = "NeuroTechX Asia - China";
 const SHOW = "Neuro Futures";
@@ -37,7 +37,7 @@ export default function IntroCard({ showControls = true, density = 1.15 }) {
         className="intro-card relative w-full overflow-hidden rounded-lg"
         style={{ aspectRatio: "16 / 9" }}
       >
-        <ConstellationMesh className="absolute inset-0 h-full w-full" density={density} />
+        <ConnectomeMesh className="absolute inset-0 h-full w-full" density={density} />
 
         <div className="intro-scrim absolute inset-0" aria-hidden="true" />
         <div className="intro-dither absolute inset-0" aria-hidden="true" />
