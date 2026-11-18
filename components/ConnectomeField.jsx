@@ -3,28 +3,32 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Connectome background — a wiring diagram of neurons, not just a field of cells.
+ * Connectome background, dense: ~1000 somata wired into one network.
  *
- * Two layers, drawn from the same data:
+ * At this node count the geometry can no longer be restroked every frame, so the
+ * whole static tissue — arbors, wiring, somata, nuclei — is rasterised ONCE into
+ * an offscreen canvas at layout, padded so it can drift without showing an edge.
+ * A frame is then two drawImage calls plus the activity layer, which is the only
+ * part that changes.
  *
- *   cellular    somata with dendritic arbors (5–6 primaries, two branching
- *               levels, four width tiers), star-shaped outlines with a nucleus —
- *               morphology from a multipolar neuron reference (Blausen 0657,
- *               Wikimedia Commons, CC BY 3.0)
- *   network     a real graph: every soma links to its 2–4 nearest neighbours in
- *               its own module, and each module sends 2–3 long tracts to other
- *               modules. Local edges are hairlines, tracts are the thicker
- *               fascicles — that contrast is what reads as a connectome
+ * Composition
+ *   somata      ~1000 per 1920x1080, ~10 % of them "cells" with full dendritic
+ *               arbors (4–6 primaries, two branching levels); the rest are small
+ *               somata with a 2–3 process tuft, which is what makes a thousand
+ *               bodies readable instead of a solid mass
+ *   modules     28 on a jittered grid, so coverage is even by construction
+ *   edges       each soma wires to its 2–3 nearest neighbours in its module
+ *               (hairlines) and each module sends 1–2 long tracts across the
+ *               frame (cyan fascicles) — the hairline/tract contrast is the
+ *               connectome read
+ *   activity    energy per soma decays with a 0.6 s half-life, a diagonal front
+ *               injects energy as it crosses, and energy diffuses across every
+ *               edge each frame, so firing spreads along the actual wiring. Edges
+ *               carrying the biggest gradient are stroked bright with a potential
+ *               running along them, capped at 110 strokes per frame.
  *
- * Activity is a dynamics, not an animation: an energy value per soma decays with
- * a 0.6 s half-life, a diagonal front injects energy as it passes, and energy
- * diffuses across every edge each frame. Firing therefore spreads along the
- * wiring — a node lights because its neighbour did — and potentials are drawn
- * along the edges that actually carry the difference.
- *
- * Cost: arbors and edges are baked once into Path2D tiers, so a frame strokes the
- * whole graph with a handful of calls; per-frame work is the 46-node energy
- * update and the handful of lit edges/pulses.
+ * Arbor alphas are trimmed 25 % from the previous pass (0.068–0.135) because a
+ * thousand cells would otherwise bury the wiring and the copy.
  *
  * The canvas never sizes its own layout box: the measured box is written back as
  * explicit clamped pixels. prefers-reduced-motion renders one still frame.
@@ -40,8 +44,9 @@ const SOMA_RGB = "214,238,255";
 const PULSE_RGB = "103,232,249";
 
 const WAVE_PERIOD = 12; // seconds for the activity front to cross
-const TIERS = 4; // arbor width classes: trunk, mid, fine, hair
 const HALF_LIFE = 0.6; // seconds for a soma's energy to halve
+const TIERS = 4; // arbor width classes: trunk, mid, fine, hair
+const PAD = 32; // padding around the baked tissue, so it can drift
 
 function mulberry32(a) {
   return function rand() {
@@ -53,11 +58,12 @@ function mulberry32(a) {
   };
 }
 
-/** One soma: star outline, nucleus, dendritic arbor. Absolute coordinates. */
+/** One soma: star outline, optional nucleus, optional dendritic arbor. */
 function buildSoma(rand, x, y, scale) {
+  const cell = rand() < 0.1; // 10 % keep the full multipolar morphology
   const tiers = Array.from({ length: TIERS }, () => []);
   const boutons = [];
-  const r = (2.4 + rand() * 2.2) * scale;
+  const r = (cell ? 2.2 + rand() * 2.0 : 0.9 + rand() * 1.1) * scale;
   const bias = rand() * Math.PI * 2;
   const spread = Math.PI * (1.2 + rand() * 0.4);
 
@@ -93,23 +99,23 @@ function buildSoma(rand, x, y, scale) {
       const childLen = l * (0.56 + rand() * 0.14);
       const tier = depth === 0 ? 1 : depth === 1 ? 2 : 3;
       const seg = process(from[0], from[1], a, childLen, 2, 0.7, tier);
-      if (depth >= 1) boutons.push(seg.end[0], seg.end[1], 0.8 * scale);
+      if (depth >= 1) boutons.push(seg.end[0], seg.end[1], 0.7 * scale);
       else grow(seg.end, seg.angle, childLen, depth + 1);
     }
   };
 
-  // 4–6 primaries, each branching twice: enough to read as a cell, light enough
-  // that the wiring between cells stays the loudest thing on screen
-  const primaries = 4 + Math.floor(rand() * 3);
+  // Cells branch twice; the crowd gets a short tuft, which is what keeps a
+  // thousand bodies from turning into a solid texture.
+  const primaries = cell ? 4 + Math.floor(rand() * 3) : 2 + Math.floor(rand() * 2);
   for (let d = 0; d < primaries; d++) {
     const angle =
       bias - spread / 2 + (d / Math.max(1, primaries - 1)) * spread + (rand() - 0.5) * 0.4;
-    const len = (26 + rand() * 40) * scale;
-    const root = process(x, y, angle, len, 3, 0.5, 0);
-    grow(root.end, root.angle, len, 0);
+    const len = (cell ? 26 + rand() * 40 : 7 + rand() * 9) * scale;
+    const root = process(x, y, angle, len, cell ? 3 : 2, 0.5, cell ? 0 : 3);
+    if (cell) grow(root.end, root.angle, len, 0);
   }
 
-  const points = 9 + Math.floor(rand() * 4);
+  const points = cell ? 9 + Math.floor(rand() * 4) : 5 + Math.floor(rand() * 3);
   const outline = [];
   for (let p = 0; p < points; p++) {
     const a = (p / points) * Math.PI * 2;
@@ -117,25 +123,27 @@ function buildSoma(rand, x, y, scale) {
     outline.push([x + Math.cos(a) * rr, y + Math.sin(a) * rr]);
   }
 
-  return { x, y, r, tiers, boutons, outline, lag: rand() * 0.12, off: rand() };
+  return { x, y, r, tiers, boutons, outline, cell, lag: rand() * 0.12, off: rand() };
 }
 
 /** A curved edge between two somata: quadratic bow, fixed per edge. */
 function edgeCurve(a, b, bow) {
-  const mx = (a.x + b.x) / 2 + (b.y - a.y) * bow;
-  const my = (a.y + b.y) / 2 - (b.x - a.x) * bow;
-  return [a.x, a.y, mx, my, b.x, b.y];
+  return [
+    a.x,
+    a.y,
+    (a.x + b.x) / 2 + (b.y - a.y) * bow,
+    (a.y + b.y) / 2 - (b.x - a.x) * bow,
+    b.x,
+    b.y,
+  ];
 }
 
 function buildField(rand, W, H, scale, density) {
   const area = (W * H) / (1920 * 1080);
-  // Full density: the tissue covers the whole frame evenly, no gradient and no
-  // quiet corner — every module of the composition gets its own cluster.
-  const count = Math.max(24, Math.round(120 * Math.sqrt(area) * density));
+  const count = Math.max(120, Math.round(1000 * Math.sqrt(area) * density));
 
-  // Modules on a jittered grid (not random placement) so coverage is even by
-  // construction: each cell of the grid holds one cluster, jittered inside it.
-  const modules = Math.max(6, Math.round(12 * density));
+  // Modules on a jittered grid: even coverage by construction, not by luck.
+  const modules = Math.max(8, Math.round(28 * density));
   const cols = Math.ceil(Math.sqrt(modules * (W / H)));
   const rows = Math.ceil(modules / cols);
   const centres = [];
@@ -148,13 +156,12 @@ function buildField(rand, W, H, scale, density) {
     }
   }
 
-  const clusterR = 0.16 * Math.min(W, H);
+  const clusterR = 0.15 * Math.min(W, H);
   const nodes = [];
   for (let i = 0; i < count; i++) {
     let x;
     let y;
-    if (i % 4 === 0) {
-      // every fourth soma sits between modules, so no gap can open up
+    if (i % 5 === 0) {
       x = rand() * W;
       y = rand() * H;
     } else {
@@ -164,12 +171,12 @@ function buildField(rand, W, H, scale, density) {
       x = cx + Math.cos(a) * r;
       y = cy + Math.sin(a) * r;
     }
-    x = Math.min(W - 8, Math.max(8, x));
-    y = Math.min(H - 8, Math.max(8, y));
-    nodes.push({ ...buildSoma(rand, x, y, scale), module: 0 });
+    nodes.push({
+      ...buildSoma(rand, Math.min(W - 6, Math.max(6, x)), Math.min(H - 6, Math.max(6, y)), scale),
+      module: 0,
+    });
   }
 
-  // Module index per node (nearest centre) — cheap and correct for scattered nodes too.
   nodes.forEach((n) => {
     let best = 0;
     let bestD = Infinity;
@@ -183,40 +190,38 @@ function buildField(rand, W, H, scale, density) {
     n.module = best;
   });
 
-  // ---- edges ----
-  const edges = []; // { a, b, tract, bow, rate }
-  const localEdges = [];
+  // ---- edges: 2–3 local projections per soma + 1–2 tracts per module ----
+  const edges = [];
+  const maxLocal = Math.max(40, 110 * scale);
   for (let i = 0; i < nodes.length; i++) {
     const a = nodes[i];
-    const candidates = [];
+    const best = [];
     for (let j = 0; j < nodes.length; j++) {
       if (j === i) continue;
       const b = nodes[j];
       const d = Math.hypot(b.x - a.x, b.y - a.y);
-      if (d < 190 * scale) candidates.push([d, j]);
+      if (d > maxLocal) continue;
+      // keep the three nearest without sorting the whole field
+      if (best.length < 3) {
+        best.push([d, j]);
+        best.sort((p, q) => p[0] - q[0]);
+      } else if (d < best[2][0]) {
+        best[2] = [d, j];
+        best.sort((p, q) => p[0] - q[0]);
+      }
     }
-    candidates.sort((p, q) => p[0] - q[0]);
-    const k = 3 + Math.floor(rand() * 3); // 3–5 local projections
-    for (let c = 0; c < Math.min(k, candidates.length); c++) {
-      const j = candidates[c][1];
-      if (j < i) continue; // one edge per pair
-      edges.push({
-        a: i,
-        b: j,
-        tract: false,
-        bow: (rand() - 0.5) * 0.5,
-        rate: 0.2 + rand() * 0.25,
-        off: rand(),
-      });
-      localEdges.push(edges.length - 1);
+    const k = 2 + Math.floor(rand() * 2);
+    for (let c = 0; c < Math.min(k, best.length); c++) {
+      const j = best[c][1];
+      if (j < i) continue;
+      edges.push({ a: i, b: j, tract: false, bow: (rand() - 0.5) * 0.45, rate: 0.24 + rand() * 0.3, off: rand() });
     }
   }
 
-  // inter-module tracts: 2–3 per module, the long fascicles of the diagram
   const byModule = centres.map((_, k) => nodes.map((n, i) => [i, n]).filter(([, n]) => n.module === k));
   byModule.forEach((members, k) => {
     if (members.length < 2) return;
-    const links = 2 + Math.floor(rand() * 2);
+    const links = 1 + Math.floor(rand() * 2);
     for (let l = 0; l < links; l++) {
       const other = (k + 1 + Math.floor(rand() * Math.max(1, centres.length - 1))) % centres.length;
       const pool = byModule[other];
@@ -224,18 +229,11 @@ function buildField(rand, W, H, scale, density) {
       const [ai] = members[Math.floor(rand() * members.length)];
       const [bi] = pool[Math.floor(rand() * pool.length)];
       if (ai === bi) continue;
-      edges.push({
-        a: ai,
-        b: bi,
-        tract: true,
-        bow: (rand() - 0.5) * 0.9,
-        rate: 0.12 + rand() * 0.12,
-        off: rand(),
-      });
+      edges.push({ a: ai, b: bi, tract: true, bow: (rand() - 0.5) * 0.9, rate: 0.12 + rand() * 0.12, off: rand() });
     }
   });
 
-  return { nodes, edges, centres };
+  return { nodes, edges, centres, count };
 }
 
 export default function ConnectomeField({ density = 1, className = "", still = false }) {
@@ -255,15 +253,10 @@ export default function ConnectomeField({ density = 1, className = "", still = f
     let H = 0;
     let dpr = 1;
     let bg = null;
+    let tissue = null;
     let nodes = [];
     let edges = [];
     let energy = null;
-    let arborPaths = [];
-    let somaPath = null;
-    let nucleusPath = null;
-    let boutonPath = null;
-    let localPath = null;
-    let tractPath = null;
     let front = { ca: 0.86, sa: 0.5, span: 1 };
     let frames = 0;
     let fpsClock = 0;
@@ -279,6 +272,7 @@ export default function ConnectomeField({ density = 1, className = "", still = f
       canvas.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+      // ---- backdrop: gradient + vignette, baked once ----
       bg = document.createElement("canvas");
       bg.width = canvas.width;
       bg.height = canvas.height;
@@ -289,14 +283,7 @@ export default function ConnectomeField({ density = 1, className = "", still = f
       g.addColorStop(1, BASE_BOTTOM);
       bctx.fillStyle = g;
       bctx.fillRect(0, 0, W, H);
-      const vg = bctx.createRadialGradient(
-        W / 2,
-        H / 2,
-        0,
-        W / 2,
-        H / 2,
-        Math.hypot(W, H) * 0.62
-      );
+      const vg = bctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.hypot(W, H) * 0.62);
       vg.addColorStop(0, "rgba(0,0,0,0)");
       vg.addColorStop(0.55, "rgba(0,0,0,0.08)");
       vg.addColorStop(1, "rgba(0,0,0,0.28)");
@@ -304,25 +291,33 @@ export default function ConnectomeField({ density = 1, className = "", still = f
       bctx.fillRect(0, 0, W, H);
 
       const scale = Math.min(1.5, Math.max(0.45, (H / 1080) * (0.8 + 0.2 * density)));
-      const rand = mulberry32(20261117);
+      const rand = mulberry32(20261118);
       const field = buildField(rand, W, H, scale, density);
       nodes = field.nodes;
       edges = field.edges;
       energy = new Float32Array(nodes.length);
 
-      arborPaths = Array.from({ length: TIERS }, () => new Path2D());
-      somaPath = new Path2D();
-      nucleusPath = new Path2D();
-      boutonPath = new Path2D();
-      localPath = new Path2D();
-      tractPath = new Path2D();
+      // ---- the static tissue, rasterised once into a padded canvas ----
+      tissue = document.createElement("canvas");
+      tissue.width = Math.round((W + PAD * 2) * dpr);
+      tissue.height = Math.round((H + PAD * 2) * dpr);
+      const t = tissue.getContext("2d");
+      t.setTransform(dpr, 0, 0, dpr, 0, 0);
+      t.translate(PAD, PAD);
+
+      const tiers = Array.from({ length: TIERS }, () => new Path2D());
+      const somaPath = new Path2D();
+      const nucleusPath = new Path2D();
+      const boutonPath = new Path2D();
+      const localPath = new Path2D();
+      const tractPath = new Path2D();
 
       nodes.forEach((n) => {
         for (let tier = 0; tier < TIERS; tier++) {
           const list = n.tiers[tier];
           for (let i = 0; i < list.length; i += 4) {
-            arborPaths[tier].moveTo(list[i], list[i + 1]);
-            arborPaths[tier].lineTo(list[i + 2], list[i + 3]);
+            tiers[tier].moveTo(list[i], list[i + 1]);
+            tiers[tier].lineTo(list[i + 2], list[i + 3]);
           }
         }
         n.outline.forEach(([px, py], i) => {
@@ -330,8 +325,10 @@ export default function ConnectomeField({ density = 1, className = "", still = f
           else somaPath.lineTo(px, py);
         });
         somaPath.closePath();
-        nucleusPath.moveTo(n.x + n.r * 0.36, n.y);
-        nucleusPath.arc(n.x, n.y, n.r * 0.36, 0, Math.PI * 2);
+        if (n.cell) {
+          nucleusPath.moveTo(n.x + n.r * 0.36, n.y);
+          nucleusPath.arc(n.x, n.y, n.r * 0.36, 0, Math.PI * 2);
+        }
         for (let i = 0; i < n.boutons.length; i += 3) {
           boutonPath.moveTo(n.boutons[i] + n.boutons[i + 2], n.boutons[i + 1]);
           boutonPath.arc(n.boutons[i], n.boutons[i + 1], n.boutons[i + 2], 0, Math.PI * 2);
@@ -339,32 +336,36 @@ export default function ConnectomeField({ density = 1, className = "", still = f
       });
 
       edges.forEach((e) => {
-        const a = nodes[e.a];
-        const b = nodes[e.b];
-        const [x0, y0, mx, my, x1, y1] = edgeCurve(a, b, e.bow);
+        const [x0, y0, mx, my, x1, y1] = edgeCurve(nodes[e.a], nodes[e.b], e.bow);
         const p = e.tract ? tractPath : localPath;
         p.moveTo(x0, y0);
         p.quadraticCurveTo(mx, my, x1, y1);
       });
 
-      front = { ca: 0.86, sa: 0.5, span: W * 0.86 + H * 0.5 };
-    };
+      // wiring first, then cellular detail — and the arbors at 75 % of the
+      // previous pass, so a thousand cells still leave the network legible
+      t.strokeStyle = `rgba(${EDGE_RGB},0.13)`;
+      t.lineWidth = 0.7;
+      t.stroke(localPath);
+      t.strokeStyle = `rgba(${TRACT_RGB},0.2)`;
+      t.lineWidth = 1.4;
+      t.stroke(tractPath);
+      t.lineCap = "round";
+      const alphas = [0.068, 0.09, 0.113, 0.135];
+      const widths = [1.4, 1.0, 0.75, 0.5];
+      for (let tier = 0; tier < TIERS; tier++) {
+        t.strokeStyle = `rgba(${DENDRITE_RGB},${alphas[tier]})`;
+        t.lineWidth = widths[tier];
+        t.stroke(tiers[tier]);
+      }
+      t.fillStyle = `rgba(${PULSE_RGB},0.24)`;
+      t.fill(boutonPath);
+      t.fillStyle = `rgba(${SOMA_RGB},0.55)`;
+      t.fill(somaPath);
+      t.fillStyle = `rgba(9,16,29,0.9)`;
+      t.fill(nucleusPath);
 
-    const drawBackground = (t) => {
-      ctx.drawImage(bg, 0, 0, W, H);
-      const breathe = 1 + 0.06 * Math.sin((2 * Math.PI * t) / 7);
-      const gx = W * 0.5;
-      const gy = H * 0.44;
-      const gr = Math.max(1, 700 * (H / 1080) * breathe);
-      const rg = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr);
-      rg.addColorStop(0, `rgba(${GLOW_RGB},0.08)`);
-      rg.addColorStop(0.55, `rgba(${GLOW_RGB},0.025)`);
-      rg.addColorStop(1, `rgba(${GLOW_RGB},0)`);
-      ctx.save();
-      ctx.globalCompositeOperation = "lighter";
-      ctx.fillStyle = rg;
-      ctx.fillRect(0, 0, W, H);
-      ctx.restore();
+      front = { ca: 0.86, sa: 0.5, span: W * 0.86 + H * 0.5 };
     };
 
     const drawFrame = (now) => {
@@ -381,12 +382,30 @@ export default function ConnectomeField({ density = 1, className = "", still = f
         fpsClock = now;
       }
 
-      drawBackground(t);
+      ctx.drawImage(bg, 0, 0, W, H);
 
-      // ---- energy dynamics: front injection + diffusion along the real edges ----
+      // breathing glow behind the copy
+      const breathe = 1 + 0.06 * Math.sin((2 * Math.PI * t) / 7);
+      const gr = Math.max(1, 700 * (H / 1080) * breathe);
+      const rg = ctx.createRadialGradient(W / 2, H * 0.44, 0, W / 2, H * 0.44, gr);
+      rg.addColorStop(0, `rgba(${GLOW_RGB},0.08)`);
+      rg.addColorStop(0.55, `rgba(${GLOW_RGB},0.025)`);
+      rg.addColorStop(1, `rgba(${GLOW_RGB},0)`);
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = rg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+
+      // the whole network in one blit, drifting slowly
+      const dx = Math.sin((2 * Math.PI * t) / 23) * 5;
+      const dy = Math.cos((2 * Math.PI * t) / 31) * 4;
+      ctx.drawImage(tissue, -PAD + dx, -PAD + dy, W + PAD * 2, H + PAD * 2);
+
+      // ---- energy: front injection + diffusion along the real wiring ----
       const decay = Math.pow(0.5, dt / HALF_LIFE);
+      const spreadK = Math.min(0.9, dt * 6);
       for (let i = 0; i < nodes.length; i++) energy[i] *= decay;
-
       const u = ((t / WAVE_PERIOD) % 1) * (front.span + 900) - 450;
       const band = 160 * (H / 1080);
       for (let i = 0; i < nodes.length; i++) {
@@ -396,86 +415,64 @@ export default function ConnectomeField({ density = 1, className = "", still = f
         const drive = Math.exp(-d * d);
         if (drive > energy[i]) energy[i] = drive;
       }
-
-      const spreadK = Math.min(0.9, dt * 6);
       for (let k = 0; k < edges.length; k++) {
         const e = edges[k];
         const diff = energy[e.a] - energy[e.b];
-        if (diff > 0.05) energy[e.b] += diff * spreadK * (e.tract ? 0.16 : 0.3);
-        else if (diff < -0.05) energy[e.a] += -diff * spreadK * (e.tract ? 0.16 : 0.3);
+        if (diff > 0.05) energy[e.b] += diff * spreadK * (e.tract ? 0.16 : 0.28);
+        else if (diff < -0.05) energy[e.a] += -diff * spreadK * (e.tract ? 0.16 : 0.28);
       }
 
-      const dx = Math.sin((2 * Math.PI * t) / 23) * 5;
-      const dy = Math.cos((2 * Math.PI * t) / 31) * 4;
       ctx.save();
       ctx.translate(dx, dy);
 
-      // ---- the wiring is the loudest layer ----
-      ctx.strokeStyle = `rgba(${EDGE_RGB},0.14)`;
-      ctx.lineWidth = 0.8;
-      ctx.stroke(localPath);
-      ctx.strokeStyle = `rgba(${TRACT_RGB},0.20)`;
-      ctx.lineWidth = 1.5;
-      ctx.stroke(tractPath);
-
-      // ---- cellular detail, quieter ----
-      const alphas = [0.09, 0.12, 0.15, 0.18];
-      const widths = [1.5, 1.1, 0.8, 0.55];
-      ctx.lineCap = "round";
-      for (let tier = 0; tier < TIERS; tier++) {
-        ctx.strokeStyle = `rgba(${DENDRITE_RGB},${alphas[tier]})`;
-        ctx.lineWidth = widths[tier];
-        ctx.stroke(arborPaths[tier]);
+      // firing somata, bucketed by brightness so a thousand arcs cost three fills
+      const buckets = [[], [], []];
+      for (let i = 0; i < nodes.length; i++) {
+        const e = energy[i];
+        if (e < 0.16) continue;
+        const n = nodes[i];
+        const b = e > 0.65 ? 2 : e > 0.35 ? 1 : 0;
+        buckets[b].push(n.x, n.y, n.r * (2.2 + 3.2 * e), e);
       }
-      ctx.fillStyle = `rgba(${PULSE_RGB},0.26)`;
-      ctx.fill(boutonPath);
+      const glowAlpha = [0.06, 0.12, 0.2];
+      for (let b = 0; b < 3; b++) {
+        const list = buckets[b];
+        if (!list.length) continue;
+        ctx.fillStyle = `rgba(${GLOW_RGB},${glowAlpha[b]})`;
+        ctx.beginPath();
+        for (let i = 0; i < list.length; i += 4) {
+          ctx.moveTo(list[i] + list[i + 2], list[i + 1]);
+          ctx.arc(list[i], list[i + 1], list[i + 2], 0, Math.PI * 2);
+        }
+        ctx.fill();
+      }
 
-      // ---- signal: edges that are actually carrying a difference ----
-      let litDrawn = 0;
-      for (let k = 0; k < edges.length; k++) {
+      // signal: edges carrying the biggest gradient, capped so a fully firing
+      // field cannot turn into hundreds of strokes
+      let lit = 0;
+      for (let k = 0; k < edges.length && lit < 110; k++) {
         const e = edges[k];
         const ea = energy[e.a];
         const eb = energy[e.b];
         const diff = Math.abs(ea - eb);
-        if (diff < 0.14) continue;
-        if (litDrawn > 110) continue;
-        litDrawn += 1;
-        const a = nodes[e.a];
-        const b = nodes[e.b];
-        const [x0, y0, mx, my, x1, y1] = edgeCurve(a, b, e.bow);
-        ctx.strokeStyle = `rgba(${PULSE_RGB},${Math.min(0.5, diff * 0.9)})`;
-        ctx.lineWidth = e.tract ? 1.7 : 1.1;
+        if (diff < 0.16) continue;
+        lit += 1;
+        const [x0, y0, mx, my, x1, y1] = edgeCurve(nodes[e.a], nodes[e.b], e.bow);
+        ctx.strokeStyle = `rgba(${PULSE_RGB},${Math.min(0.45, diff * 0.85)})`;
+        ctx.lineWidth = e.tract ? 1.6 : 1.0;
         ctx.beginPath();
         ctx.moveTo(x0, y0);
         ctx.quadraticCurveTo(mx, my, x1, y1);
         ctx.stroke();
 
-        // potential travelling a → b; direction is carried by which soma is
-        // hotter, so the same parameterisation serves both directions
-        const q = (ea > eb ? (t * e.rate + e.off) % 1 : 1 - ((t * e.rate + e.off) % 1));
+        const q = (t * e.rate + e.off) % 1;
         const iq = 1 - q;
         const px = iq * iq * x0 + 2 * iq * q * mx + q * q * x1;
         const py = iq * iq * y0 + 2 * iq * q * my + q * q * y1;
         const fade = Math.sin(Math.PI * q) ** 2 * Math.min(1, diff * 1.6);
-        ctx.fillStyle = `rgba(${PULSE_RGB},${0.85 * fade})`;
+        ctx.fillStyle = `rgba(${PULSE_RGB},${0.8 * fade})`;
         ctx.beginPath();
-        ctx.arc(px, py, 1.4 + 1.4 * fade, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // ---- somata and nuclei ----
-      ctx.fillStyle = `rgba(${SOMA_RGB},0.5)`;
-      ctx.fill(somaPath);
-      ctx.fillStyle = `rgba(9,16,29,0.9)`;
-      ctx.fill(nucleusPath);
-
-      for (let i = 0; i < nodes.length; i++) {
-        const e = energy[i];
-        if (e < 0.18) continue;
-        const n = nodes[i];
-        ctx.fillStyle = `rgba(${GLOW_RGB},${0.05 + 0.3 * e})`;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r * (2.2 + 3.4 * e), 0, Math.PI * 2);
+        ctx.arc(px, py, 1.2 + 1.2 * fade, 0, Math.PI * 2);
         ctx.fill();
       }
 
