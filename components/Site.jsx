@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import communityPhotos from "../content/community-photos.json";
 import { HOOKS_ZH } from "../content/hooks_zh";
-import NeuronField from "./NeuronField";
+import ConnectomeField from "./ConnectomeField";
 import ThemeToggle from "./ThemeToggle";
 import ContactDialog from "./ContactDialog";
 import AsiaChapterMap from "./AsiaChapterMap";
@@ -268,7 +268,7 @@ export default function Site({ copy, ecosystem, locale = "zh" }) {
         {/* hero */}
         <section className="relative overflow-hidden border-b border-border">
           <div className="mesh-layer absolute inset-0">
-            <NeuronField className="h-full w-full" density={1} />
+            <ConnectomeField className="h-full w-full" density={1} />
           </div>
           <div className="hero-vignette pointer-events-none absolute inset-0" />
           <div className="relative mx-auto max-w-6xl px-5 py-20 md:py-28">
@@ -536,7 +536,7 @@ export default function Site({ copy, ecosystem, locale = "zh" }) {
           <div className="mx-auto max-w-6xl px-5 py-20 md:py-24">
             <div className="frame glow glow-center glow-inside podcast-frame relative overflow-hidden p-8 md:p-12">
               <div className="mesh-layer absolute inset-0">
-                <NeuronField className="absolute inset-0 h-full w-full" density={0.85} />
+                <ConnectomeField className="absolute inset-0 h-full w-full" density={0.85} />
               </div>
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/20" />
               <div className="relative z-10 max-w-2xl">
@@ -796,7 +796,7 @@ function EventGallery({ t, lang }) {
     >
       <div className="frame glow glow-right glow-inside relative overflow-hidden bg-surface-1/40">
         <div className="mesh-layer absolute inset-0">
-          <NeuronField className="absolute inset-0 h-full w-full" density={0.75} />
+          <ConnectomeField className="absolute inset-0 h-full w-full" density={0.75} />
         </div>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-background/95 via-background/80 to-background/45" />
 
