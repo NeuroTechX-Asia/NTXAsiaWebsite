@@ -34,14 +34,21 @@ import { useEffect, useRef } from "react";
  * explicit clamped pixels. prefers-reduced-motion renders one still frame.
  */
 
-const BASE_TOP = "#05080d";
-const BASE_BOTTOM = "#0a1220";
-const GLOW_RGB = "34,211,238";
-const DENDRITE_RGB = "150,190,235";
-const EDGE_RGB = "120,190,230";
-const TRACT_RGB = "34,211,238";
-const SOMA_RGB = "214,238,255";
-const PULSE_RGB = "103,232,249";
+// Palette: the original background's violet, restored verbatim from
+// ConstellationMesh (nodes 212,198,255 / near edge 156,126,232 / far edge
+// 120,96,190 / glow 44,22,86 / sweep 38,26,74 on a 7,4,15 -> 16,9,34 base), with
+// cyan 120,226,242 kept for the travelling potential. Violet is the background's
+// identity; cyan is only ever the signal that moves through it.
+const BASE_TOP = "rgb(7,4,15)";
+const BASE_BOTTOM = "rgb(16,9,34)";
+const GLOW_RGB = "44,22,86";
+const SWEEP_RGB = "38,26,74";
+const DENDRITE_RGB = "196,178,242";
+const EDGE_RGB = "156,126,232";
+const TRACT_RGB = "178,140,250";
+const SOMA_RGB = "212,198,255";
+const SOMA_GLOW_RGB = "146,104,230";
+const PULSE_RGB = "120,226,242";
 
 const WAVE_PERIOD = 12; // seconds for the activity front to cross
 const HALF_LIFE = 0.6; // seconds for a soma's energy to halve
@@ -344,14 +351,14 @@ export default function ConnectomeField({ density = 1, className = "", still = f
 
       // wiring first, then cellular detail — and the arbors at 75 % of the
       // previous pass, so a thousand cells still leave the network legible
-      t.strokeStyle = `rgba(${EDGE_RGB},0.13)`;
+      t.strokeStyle = `rgba(${EDGE_RGB},0.16)`;
       t.lineWidth = 0.7;
       t.stroke(localPath);
       t.strokeStyle = `rgba(${TRACT_RGB},0.2)`;
       t.lineWidth = 1.4;
       t.stroke(tractPath);
       t.lineCap = "round";
-      const alphas = [0.068, 0.09, 0.113, 0.135];
+      const alphas = [0.078, 0.104, 0.13, 0.155];
       const widths = [1.4, 1.0, 0.75, 0.5];
       for (let tier = 0; tier < TIERS; tier++) {
         t.strokeStyle = `rgba(${DENDRITE_RGB},${alphas[tier]})`;
@@ -360,7 +367,7 @@ export default function ConnectomeField({ density = 1, className = "", still = f
       }
       t.fillStyle = `rgba(${PULSE_RGB},0.24)`;
       t.fill(boutonPath);
-      t.fillStyle = `rgba(${SOMA_RGB},0.55)`;
+      t.fillStyle = `rgba(${SOMA_RGB},0.7)`;
       t.fill(somaPath);
       t.fillStyle = `rgba(9,16,29,0.9)`;
       t.fill(nucleusPath);
@@ -384,16 +391,35 @@ export default function ConnectomeField({ density = 1, className = "", still = f
 
       ctx.drawImage(bg, 0, 0, W, H);
 
-      // breathing glow behind the copy
-      const breathe = 1 + 0.06 * Math.sin((2 * Math.PI * t) / 7);
-      const gr = Math.max(1, 700 * (H / 1080) * breathe);
-      const rg = ctx.createRadialGradient(W / 2, H * 0.44, 0, W / 2, H * 0.44, gr);
-      rg.addColorStop(0, `rgba(${GLOW_RGB},0.08)`);
-      rg.addColorStop(0.55, `rgba(${GLOW_RGB},0.025)`);
+      // breathing violet glow behind the copy, then the slow swept highlight —
+      // both at the original's strengths, so the ambience is the one that shipped
+      const breathe = 1 + 0.07 * Math.sin((2 * Math.PI * t) / 7);
+      const gr = Math.max(1, 780 * (H / 1080) * breathe);
+      const rg = ctx.createRadialGradient(W / 2, H * 0.46, 0, W / 2, H * 0.46, gr);
+      rg.addColorStop(0, `rgba(${GLOW_RGB},0.55)`);
+      rg.addColorStop(0.55, `rgba(${GLOW_RGB},0.18)`);
       rg.addColorStop(1, `rgba(${GLOW_RGB},0)`);
       ctx.save();
       ctx.globalCompositeOperation = "lighter";
       ctx.fillStyle = rg;
+      ctx.fillRect(0, 0, W, H);
+
+      const th = 0.55 + ((t / 23) * Math.PI) / 2;
+      const c = -600 + (W + H) * 1.6 * ((t / 23) % 1);
+      const sdx = Math.cos(th);
+      const sdy = Math.sin(th);
+      const sweep = ctx.createLinearGradient(
+        W / 2 + sdx * (c - 260),
+        H / 2 + sdy * (c - 260),
+        W / 2 + sdx * (c + 260),
+        H / 2 + sdy * (c + 260)
+      );
+      sweep.addColorStop(0, `rgba(${SWEEP_RGB},0)`);
+      sweep.addColorStop(0.18, `rgba(${SWEEP_RGB},0.1)`);
+      sweep.addColorStop(0.5, `rgba(${SWEEP_RGB},0.5)`);
+      sweep.addColorStop(0.82, `rgba(${SWEEP_RGB},0.1)`);
+      sweep.addColorStop(1, `rgba(${SWEEP_RGB},0)`);
+      ctx.fillStyle = sweep;
       ctx.fillRect(0, 0, W, H);
       ctx.restore();
 
@@ -438,7 +464,7 @@ export default function ConnectomeField({ density = 1, className = "", still = f
       for (let b = 0; b < 3; b++) {
         const list = buckets[b];
         if (!list.length) continue;
-        ctx.fillStyle = `rgba(${GLOW_RGB},${glowAlpha[b]})`;
+        ctx.fillStyle = `rgba(${SOMA_GLOW_RGB},${glowAlpha[b]})`;
         ctx.beginPath();
         for (let i = 0; i < list.length; i += 4) {
           ctx.moveTo(list[i] + list[i + 2], list[i + 1]);
