@@ -129,65 +129,37 @@ function edgeCurve(a, b, bow) {
 
 function buildField(rand, W, H, scale, density) {
   const area = (W * H) / (1920 * 1080);
-  const count = Math.max(16, Math.round(72 * Math.sqrt(area) * density));
+  // Full density: the tissue covers the whole frame evenly, no gradient and no
+  // quiet corner — every module of the composition gets its own cluster.
+  const count = Math.max(24, Math.round(120 * Math.sqrt(area) * density));
 
-  // Composition: tissue is packed into the right, the bottom and especially the
-  // bottom-right corner, and thins out toward the left edge so the left column of
-  // the layout stays quiet. One function drives modules, somata and scatter, so
-  // the gradient is consistent instead of three independent biases.
-  const densityAt = (x, y) => {
-    const nx = Math.min(1, Math.max(0, x / W));
-    const ny = Math.min(1, Math.max(0, y / H));
-    // A gentle bias, not a corner spotlight: the floor keeps the left, the top
-    // and the centre populated, the exponents tilt the mass to the bottom-right.
-    const sx = 0.5 + 0.5 * Math.pow(nx, 1.4); // left -> right
-    const sy = 0.5 + 0.5 * Math.pow(ny, 1.1); // top -> bottom
-    return sx * sy; // 0.25 top-left, 0.5 centre, 1 bottom-right
-  };
-
-  // rejection sampling against that field
-  const sample = () => {
-    for (let tries = 0; tries < 80; tries++) {
-      const x = rand() * W;
-      const y = rand() * H;
-      if (rand() < densityAt(x, y)) return [x, y];
-    }
-    const x = rand() * W;
-    return [x, rand() * H];
-  };
-
-  // Module centres, spread out but themselves weighted by the same field, so the
-  // clusters sit where the density is. Minimum separation keeps them legible.
-  const modules = Math.max(5, Math.round(9 * density));
+  // Modules on a jittered grid (not random placement) so coverage is even by
+  // construction: each cell of the grid holds one cluster, jittered inside it.
+  const modules = Math.max(6, Math.round(12 * density));
+  const cols = Math.ceil(Math.sqrt(modules * (W / H)));
+  const rows = Math.ceil(modules / cols);
   const centres = [];
-  const minSep = Math.min(W, H) * 0.15;
-  for (let tries = 0; tries < 600 && centres.length < modules; tries++) {
-    const [x, y] = sample();
-    if (centres.every(([cx, cy]) => Math.hypot(cx - x, cy - y) > minSep)) centres.push([x, y]);
+  for (let r = 0; r < rows && centres.length < modules; r++) {
+    for (let c = 0; c < cols && centres.length < modules; c++) {
+      centres.push([
+        ((c + 0.5) / cols) * W + (rand() - 0.5) * (W / cols) * 0.7,
+        ((r + 0.5) / rows) * H + (rand() - 0.5) * (H / rows) * 0.7,
+      ]);
+    }
   }
 
-  const centreWeights = centres.map(([x, y]) => densityAt(x, y));
-  const weightSum = centreWeights.reduce((a, b) => a + b, 0) || 1;
-  const pickCentre = () => {
-    let r = rand() * weightSum;
-    for (let k = 0; k < centres.length; k++) {
-      r -= centreWeights[k];
-      if (r <= 0) return k;
-    }
-    return centres.length - 1;
-  };
-
-  const clusterR = 0.17 * Math.min(W, H);
+  const clusterR = 0.16 * Math.min(W, H);
   const nodes = [];
   for (let i = 0; i < count; i++) {
     let x;
     let y;
-    if (i % 5 === 0) {
-      // a few somata sit between modules, on the same gradient
-      [x, y] = sample();
+    if (i % 4 === 0) {
+      // every fourth soma sits between modules, so no gap can open up
+      x = rand() * W;
+      y = rand() * H;
     } else {
-      const [cx, cy] = centres[pickCentre()];
-      const r = Math.sqrt(rand()) * clusterR * (0.7 + rand() * 0.6);
+      const [cx, cy] = centres[Math.floor(rand() * centres.length)];
+      const r = Math.sqrt(rand()) * clusterR;
       const a = rand() * Math.PI * 2;
       x = cx + Math.cos(a) * r;
       y = cy + Math.sin(a) * r;
@@ -459,12 +431,15 @@ export default function ConnectomeField({ density = 1, className = "", still = f
       ctx.fill(boutonPath);
 
       // ---- signal: edges that are actually carrying a difference ----
+      let litDrawn = 0;
       for (let k = 0; k < edges.length; k++) {
         const e = edges[k];
         const ea = energy[e.a];
         const eb = energy[e.b];
         const diff = Math.abs(ea - eb);
-        if (diff < 0.12) continue;
+        if (diff < 0.14) continue;
+        if (litDrawn > 110) continue;
+        litDrawn += 1;
         const a = nodes[e.a];
         const b = nodes[e.b];
         const [x0, y0, mx, my, x1, y1] = edgeCurve(a, b, e.bow);
