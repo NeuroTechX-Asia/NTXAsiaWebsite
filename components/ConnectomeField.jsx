@@ -129,7 +129,7 @@ function edgeCurve(a, b, bow) {
 
 function buildField(rand, W, H, scale, density) {
   const area = (W * H) / (1920 * 1080);
-  const count = Math.max(16, Math.round(64 * Math.sqrt(area) * density));
+  const count = Math.max(16, Math.round(72 * Math.sqrt(area) * density));
 
   // Composition: tissue is packed into the right, the bottom and especially the
   // bottom-right corner, and thins out toward the left edge so the left column of
@@ -138,9 +138,11 @@ function buildField(rand, W, H, scale, density) {
   const densityAt = (x, y) => {
     const nx = Math.min(1, Math.max(0, x / W));
     const ny = Math.min(1, Math.max(0, y / H));
-    const sx = 0.16 + 0.84 * Math.pow(nx, 2.0); // left -> right
-    const sy = 0.2 + 0.8 * Math.pow(ny, 1.5); // top -> bottom
-    return sx * sy; // 0.03 at the top-left, 1 at the bottom-right
+    // A gentle bias, not a corner spotlight: the floor keeps the left, the top
+    // and the centre populated, the exponents tilt the mass to the bottom-right.
+    const sx = 0.5 + 0.5 * Math.pow(nx, 1.4); // left -> right
+    const sy = 0.5 + 0.5 * Math.pow(ny, 1.1); // top -> bottom
+    return sx * sy; // 0.25 top-left, 0.5 centre, 1 bottom-right
   };
 
   // rejection sampling against that field
@@ -156,7 +158,7 @@ function buildField(rand, W, H, scale, density) {
 
   // Module centres, spread out but themselves weighted by the same field, so the
   // clusters sit where the density is. Minimum separation keeps them legible.
-  const modules = Math.max(4, Math.round(7 * density));
+  const modules = Math.max(5, Math.round(9 * density));
   const centres = [];
   const minSep = Math.min(W, H) * 0.15;
   for (let tries = 0; tries < 600 && centres.length < modules; tries++) {
@@ -180,7 +182,7 @@ function buildField(rand, W, H, scale, density) {
   for (let i = 0; i < count; i++) {
     let x;
     let y;
-    if (i % 7 === 0) {
+    if (i % 5 === 0) {
       // a few somata sit between modules, on the same gradient
       [x, y] = sample();
     } else {
